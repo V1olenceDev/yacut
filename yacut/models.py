@@ -4,7 +4,7 @@ from random import choices
 from typing import Any
 
 from . import db
-from .constants import SIZE_SHORT_ID, MAX_ATTEMPTS, SHORT_ID_PATTERN
+from .constants import SIZE_SHORT_ID, MAX_ATTEMPTS
 from .exceptions import InvalidAPIUsageError
 
 CHAR_SET = string.ascii_letters + string.digits
@@ -25,12 +25,10 @@ class URLMap(db.Model):
             if not cls.query.filter_by(short=short_id).first():
                 return short_id
         raise Exception("Не удалось сгенерировать уникальный короткий идентификатор.")
-
-    
+ 
     @classmethod
     def find_by_short_id(cls, short_id: str):
         return cls.query.filter_by(short=short_id).first()
-
 
     def save(self):
         if not self.original or not re.match(r'^https?://', self.original):
@@ -45,7 +43,6 @@ class URLMap(db.Model):
             raise InvalidAPIUsageError('Предложенный вариант короткой ссылки уже существует.')
         db.session.add(self)
         db.session.commit()
-    
     
     def to_dict(self) -> dict[str, Any]:
         return {
