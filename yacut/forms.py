@@ -2,13 +2,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, URLField
 from wtforms.validators import DataRequired, Length, Optional, Regexp
 
+from .constants import MAX_URL_LENGTH, SHORT_ID_PATTERN
 
 class UrlForm(FlaskForm):
     original_link = URLField(
         'Длинная ссылка',
         validators=[
             DataRequired(message='Обязательное поле'),
-            Length(1, 256)
+            Length(1, MAX_URL_LENGTH)
         ]
     )
     custom_id = StringField(
@@ -16,7 +17,7 @@ class UrlForm(FlaskForm):
         validators=[
             Optional(),
             Regexp(
-                regex=r'^[A-Za-z0-9]{1,16}$',
+                regex=SHORT_ID_PATTERN,
                 message='Недопустимое имя для короткой ссылки.'
             )
         ]
