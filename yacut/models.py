@@ -1,4 +1,5 @@
-import string, re
+import string
+import re
 from datetime import datetime
 from random import choices
 from typing import Any
@@ -25,7 +26,7 @@ class URLMap(db.Model):
             if not cls.query.filter_by(short=short_id).first():
                 return short_id
         raise Exception("Не удалось сгенерировать уникальный короткий идентификатор.")
- 
+
     @classmethod
     def find_by_short_id(cls, short_id: str):
         return cls.query.filter_by(short=short_id).first()
@@ -43,7 +44,7 @@ class URLMap(db.Model):
             raise InvalidAPIUsageError('Предложенный вариант короткой ссылки уже существует.')
         db.session.add(self)
         db.session.commit()
-    
+
     def to_dict(self) -> dict[str, Any]:
         return {
             'id': self.id,
