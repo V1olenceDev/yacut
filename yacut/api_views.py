@@ -23,9 +23,10 @@ def create_url_map() -> tuple[Response, int]:
         raise InvalidAPIUsageError('Отсутствует тело запроса')
     if not data.get('url'):
         raise InvalidAPIUsageError('"url" является обязательным полем!')
-    url_map = URLMap()
-    url_map.from_dict(data)
+    
+    url_map = URLMap.from_dict(data)
     url_map.save()
+    
     return jsonify({
         'url': url_map.original,
         'short_link': 'http://localhost/' + url_map.short

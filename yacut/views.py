@@ -9,27 +9,21 @@ from .models import URLMap
 @app.route('/', methods=['GET', 'POST'])
 def add_url_map() -> str:
     form = UrlForm()
-    custom_id = form.custom_id.data
-    if URLMap.query.filter_by(short=custom_id).first():
-        flash(
-            'Предложенный вариант короткой ссылки уже существует.',
-            'non-unique'
-        )
-        return render_template('index.html', form=form)
     if form.validate_on_submit():
+        custom_id = form.custom_id.data
+        if URLMap.find_by_short_id(custom_id):
+            flash('Предложенный вариант короткой ссылки уже существует.', 'non-unique')
+            return render_template('index.html', form=form)
+        
         url_map = URLMap(
             original=form.original_link.data,
-            short=(
-                custom_id if custom_id
-                else URLMap.get_unique_short_id()
-            )
+            short=(custom_id if custom_id else URLMap.get_unique_short_id())
         )
-        db.session.add(url_map)
-        db.session.commit()
-        flash(url_for(
-            'follow_url_map', short=url_map.short, _external=True), 'link'
-        )
+        url_map.save()
+        flash(url_for('follow_url_map', short=url_map.short, _external=True), 'link')
+
     return render_template('index.html', form=form)
+
 
 
 @app.route('/<string:short>')
