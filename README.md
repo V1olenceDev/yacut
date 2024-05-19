@@ -39,7 +39,31 @@ python -m venv venv
 python -m pip install --upgrade pip
 ```
 
+
 ```
 pip install -r requirements.txt
 ```
 
+Создайте `.env` файл с переменными окружения:
+
+```
+FLASK_APP=yacut
+FLASK_ENV=development
+DATABASE_URI=sqlite:///db.sqlite3
+SECRET_KEY=YOUR_SECRET_KEY
+```
+
+Выполните миграции:
+
+```
+flask db upgrade
+```
+
+Запустите сервис на веб-сервере разработки Flask:
+
+```
+flask run
+```
+
+## Автор
+[Гаспарян Валерий Гургенович](https://github.com/V1olenceDev)
